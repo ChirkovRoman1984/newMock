@@ -22,23 +22,23 @@ public class MainController {
     private final Logger log = LoggerFactory.getLogger(MainController.class);
     private final ObjectMapper mapper = new ObjectMapper();
 
-    @PostMapping(
-            value = "/info/postBalances",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+    private static void setBalanceAndLimit(ResponseDTO response, String currency, String limit) {
 
-    public static void setBalanceAndLimit(ResponseDTO response, String currency, String Limit) {
+        BigDecimal maxLimit = new BigDecimal(limit);
 
-        BigDecimal maxLimit = new BigDecimal(Limit);
         BigDecimal balance = BigDecimal.valueOf(
-                new Random().nextDouble(Double.parseDouble(Limit)))
+                new Random().nextDouble(Double.parseDouble(limit)))
                 .setScale(2, RoundingMode.HALF_UP);
         response.setBalance(balance);
         response.setMaxLimit(maxLimit);
         response.setCurrency(currency);
     }
 
+    @PostMapping(
+            value = "/info/postBalances",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public Object postBalances(@RequestBody RequestDTO requestDTO) {
 
         try {
